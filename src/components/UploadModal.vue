@@ -1,4 +1,5 @@
 <template>
+  <!-- O clique no fundo fecha o modal; cliques no conteúdo não se propagam. -->
   <div class="modal-backdrop" @click.self="$emit('close')">
     <section
       class="upload-modal"
@@ -9,7 +10,7 @@
       <header class="upload-modal__header">
         <div>
           <h2 id="upload-title">Enviar arquivos</h2>
-          <p>Selecione um arquivo PDF com texto para extrair os CPFs.</p>
+          <p>Selecione um arquivo PDF para extrair CPFs e CNPJs.</p>
         </div>
         <button
           class="close-button"
@@ -20,6 +21,7 @@
         </button>
       </header>
 
+      <!-- Input nativo invisível acionado pelas áreas visuais de seleção. -->
       <input
         ref="fileInput"
         class="sr-only"
@@ -27,6 +29,7 @@
         accept="application/pdf,.pdf"
         @change="selectFromInput"
       />
+      <!-- Área aceita clique e também arquivo arrastado pelo usuário. -->
       <button
         v-if="!file"
         class="drop-zone"
@@ -48,6 +51,7 @@
         <button @click="$refs.fileInput.click()">Substituir arquivo</button>
       </div>
 
+      <!-- Feedback compartilhado com o componente pai por props. -->
       <div v-if="isProcessing" class="progress">
         <span :style="{ width: `${progress}%` }"></span>
       </div>
@@ -67,7 +71,7 @@
           @click="$emit('submit', file)"
         >
           <img src="../assets/icons/extract-white.svg" alt="" />
-          {{ isProcessing ? "Processando..." : "Extrair CPF" }}
+          {{ isProcessing ? "Processando..." : "Extrair documentos" }}
         </button>
       </footer>
     </section>
@@ -86,9 +90,11 @@ export default {
     return { file: null, isDragging: false };
   },
   methods: {
+    // Entrada pelo seletor de arquivos do sistema operacional.
     selectFromInput(event) {
       this.setFile(event.target.files[0]);
     },
+    // Entrada por arrastar e soltar dentro da área pontilhada.
     selectDropped(event) {
       this.isDragging = false;
       this.setFile(event.dataTransfer.files[0]);

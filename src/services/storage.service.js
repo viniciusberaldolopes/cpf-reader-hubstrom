@@ -1,11 +1,8 @@
-import {
-  ref,
-  uploadBytesResumable,
-  getDownloadURL,
-  deleteObject,
-} from "firebase/storage";
-import { storage } from "./firebase";
+import { supabase } from "./supabase";
 
+const BUCKET = "pdfs";
+
+// Retira acentos e caracteres problemáticos antes de montar o caminho no bucket.
 function safeName(name) {
   return name
     .normalize("NFD")
@@ -13,35 +10,35 @@ function safeName(name) {
     .replace(/[^a-zA-Z0-9._-]/g, "_");
 }
 
-export function uploadPdf(file, uploadId, onProgress) {
-  if (!storage)
-    throw new Error("Configure as variáveis do Firebase no arquivo .env.");
-  const storagePath = `pdfs/${uploadId}/${safeName(file.name)}`;
-  const fileRef = ref(storage, storagePath);
-  const task = uploadBytesResumable(fileRef, file, {
-    contentType: "application/pdf",
-  });
+export async function uploadPdf(file, uploadId, onProgress) {
+  if (!supabase) {
+    throw new Error("Configure as variáveis do Supabase no arquivo .env.");
+  }
 
-  return new Promise((resolve, reject) => {
-    task.on(
-      "state_changed",
-      (snapshot) => {
-        onProgress(
-          Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100),
-        );
-      },
-      reject,
-      async () => {
-        resolve({
-          storagePath,
-          downloadUrl: await getDownloadURL(task.snapshot.ref),
-        });
-      },
-    );
-  });
+  // Cada upload recebe uma pasta própria para evitar conflito entre nomes iguais.
+  const storagePath = `${uploadId}/${safeName(file.name)}`;
+
+  // O SDK não informa progresso por byte neste método. Os valores representam etapas.
+  onProgress(65);
+  const { error } = await supabase.storage
+    .from(BUCKET)
+    .upload(storagePath, file, {
+      contentType: "application/pdf",
+      upsert: false,
+    });
+  if (error) throw error;
+
+  onProgress(90);
+
+  // O bucket é público para permitir o download direto pela tela do teste.
+  const { data } = supabase.storage.from(BUCKET).getPublicUrl(storagePath);
+  return { storagePath, downloadUrl: data.publicUrl };
 }
 
-export function removePdf(storagePath) {
-  if (!storage) return Promise.resolve();
-  return deleteObject(ref(storage, storagePath));
+export async function removePdf(storagePath) {
+  if (!supabase || !storagePath) return;
+
+  // Usado como compensação se o PDF subir, mas a gravação no Firebase falhar.
+  const { error } = await supabase.storage.from(BUCKET).remove([storagePath]);
+  if (error) throw error;
 }

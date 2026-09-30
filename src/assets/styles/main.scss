@@ -1,4 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap");
+
+// Cores compartilhadas entre os componentes da interface.
 :root {
   --primary: #1e293b;
   --secondary: #475569;
@@ -8,10 +10,43 @@
   --brand-light: #d8f2e3;
   --border: #e2e8f0;
   --background: #f1f5f9;
+  --surface: #ffffff;
+  --surface-muted: #f8fafc;
+  --surface-raised: #f1f5f9;
+  --topbar: #171717;
+  --dark-button: #171717;
+  --input-border: #cbd5e1;
+  --muted-button: #f5f5f5;
+  --icon-border: #a3a3a3;
+  --overlay: rgba(15, 23, 42, 0.55);
+  --shadow: rgba(0, 0, 0, 0.05);
+}
+
+:root[data-theme="dark"] {
+  --primary: #f1f5f9;
+  --secondary: #cbd5e1;
+  --subtle: #94a3b8;
+  --brand: #34b978;
+  --brand-dark: #86efac;
+  --brand-light: #163d2b;
+  --border: #334155;
+  --background: #0f172a;
+  --surface: #1e293b;
+  --surface-muted: #172033;
+  --surface-raised: #293548;
+  --topbar: #090d15;
+  --dark-button: #0b1220;
+  --input-border: #475569;
+  --muted-button: #334155;
+  --icon-border: #64748b;
+  --overlay: rgba(2, 6, 23, 0.75);
+  --shadow: rgba(0, 0, 0, 0.25);
 }
 * {
   box-sizing: border-box;
 }
+
+// Reset básico e tipografia geral.
 html,
 body,
 #app {
@@ -23,6 +58,7 @@ body {
   background: var(--background);
   font-family: Poppins, sans-serif;
   font-size: 13px;
+  transition: color 160ms ease, background-color 160ms ease;
 }
 button,
 input {
@@ -37,6 +73,8 @@ h3,
 p {
   margin: 0;
 }
+
+// Estrutura principal: barra superior, menu lateral e área de conteúdo.
 .app-shell {
   min-height: 100vh;
   padding-top: 80px;
@@ -49,7 +87,7 @@ p {
   display: flex;
   align-items: center;
   padding: 0 32px;
-  background: #171717;
+  background: var(--topbar);
 }
 .topbar img {
   width: 114.258px;
@@ -63,7 +101,7 @@ p {
   bottom: 0;
   width: 240px;
   padding: 16px;
-  background: #fff;
+  background: var(--surface);
   border-right: 1px solid var(--border);
 }
 .nav-item {
@@ -78,6 +116,9 @@ p {
   align-items: center;
   font-size: 14px;
   cursor: pointer;
+}
+.theme-toggle:hover {
+  background: var(--surface-muted);
 }
 .nav-item img {
   width: 24px;
@@ -104,13 +145,15 @@ p {
   display: grid;
   place-items: center;
   border: 1px solid #cbd5e1;
-  background: #f8fafc;
+  background: var(--surface-muted);
   border-radius: 50%;
 }
 .sidebar-toggle img {
   width: 18px;
   transform: rotate(180deg);
 }
+
+// Cabeçalho e conteúdo do dashboard.
 .main-content {
   margin-left: 240px;
   min-width: 0;
@@ -173,6 +216,8 @@ p {
   color: var(--brand-dark);
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
 }
+
+// Cards de resumo exibidos acima das tabelas.
 .stats-grid {
   margin-top: 24px;
   display: grid;
@@ -186,7 +231,7 @@ p {
   flex-direction: column;
   justify-content: center;
   gap: 32px;
-  background: #fff;
+  background: var(--surface);
   border: 1px solid transparent;
   border-radius: 16px;
 }
@@ -230,6 +275,8 @@ p {
   margin-top: 4px;
   color: var(--subtle);
 }
+
+// Painéis que dividem o histórico e a última extração.
 .tables-grid {
   margin-top: 24px;
   display: grid;
@@ -246,9 +293,9 @@ p {
   flex-direction: column;
   gap: 32px;
   overflow: hidden;
-  background: #fff;
+  background: var(--surface);
   border-radius: 16px;
-  box-shadow: 1px 2px 2px rgba(0, 0, 0, 0.05);
+  box-shadow: 1px 2px 2px var(--shadow);
 }
 .panel__header--row {
   display: flex;
@@ -256,6 +303,8 @@ p {
   align-items: center;
   gap: 16px;
 }
+
+// Campo de pesquisa do histórico.
 .search-field {
   display: flex;
   flex-direction: column;
@@ -273,7 +322,7 @@ p {
   display: flex;
   align-items: center;
   gap: 8px;
-  border: 1px solid #cbd5e1;
+  border: 1px solid var(--input-border);
   border-radius: 8px;
 }
 .search-field__control img {
@@ -285,6 +334,8 @@ p {
   outline: 0;
   background: transparent;
 }
+
+// Tabelas e estados sem conteúdo.
 .table-scroll {
   flex: 1;
   min-height: 0;
@@ -298,7 +349,7 @@ table {
 th {
   height: 40px;
   padding: 12px 16px;
-  background: #f8fafc;
+  background: var(--surface-muted);
   text-align: left;
 }
 td {
@@ -326,8 +377,8 @@ td {
   padding: 16px;
   display: grid;
   place-items: center;
-  background: #f8fafc;
-  border: 1px solid #a3a3a3;
+  background: var(--surface-muted);
+  border: 1px solid var(--icon-border);
   border-radius: 8px;
 }
 .empty-state__icon img {
@@ -346,6 +397,8 @@ td {
 .empty-state--upload .button {
   margin-top: 16px;
 }
+
+// Variações de botões usadas em toda a aplicação.
 .button {
   min-height: 36px;
   padding: 8px 16px;
@@ -370,23 +423,25 @@ td {
 }
 .button--dark {
   color: #fff;
-  background: #171717;
+  background: var(--dark-button);
 }
 .button--light {
-  background: #f5f5f5;
-  border: 1px solid #cbd5e1;
+  background: var(--muted-button);
+  border: 1px solid var(--input-border);
 }
 .button:disabled {
   opacity: 0.4;
   cursor: not-allowed;
 }
+
+// Resumo do PDF e etiquetas de documento válido ou inválido.
 .file-summary {
   min-height: 76px;
   padding: 16px 20px;
   display: flex;
   align-items: center;
   gap: 12px;
-  background: #f1f5f9;
+  background: var(--surface-raised);
   border-radius: 8px;
 }
 .file-summary__icon,
@@ -446,6 +501,8 @@ td {
   color: #ef4444;
   background: #fecaca;
 }
+
+// Janela de seleção e envio do arquivo.
 .modal-backdrop {
   position: fixed;
   z-index: 100;
@@ -453,7 +510,7 @@ td {
   display: grid;
   place-items: center;
   padding: 24px;
-  background: rgba(15, 23, 42, 0.55);
+  background: var(--overlay);
 }
 .upload-modal {
   width: min(677px, 100%);
@@ -461,7 +518,7 @@ td {
   display: flex;
   flex-direction: column;
   gap: 24px;
-  background: #fff;
+  background: var(--surface);
   border-radius: 8px;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
@@ -485,7 +542,7 @@ td {
   padding: 5.6px;
   border: 0;
   border-radius: 50%;
-  background: #e5e5e5;
+  background: var(--muted-button);
   cursor: pointer;
 }
 .close-button img {
@@ -500,7 +557,7 @@ td {
   align-items: center;
   justify-content: center;
   gap: 4px;
-  background: #f8fafc;
+  background: var(--surface-muted);
   border: 1px dashed #64748b;
   border-radius: 4px;
   cursor: pointer;
@@ -554,6 +611,18 @@ td {
   background: #e2e8f0;
   border-radius: 99px;
 }
+
+:root[data-theme="dark"] .theme-toggle img {
+  filter: none;
+}
+
+:root[data-theme="dark"] .search-field__control img,
+:root[data-theme="dark"] .empty-state__icon img,
+:root[data-theme="dark"] .close-button img,
+:root[data-theme="dark"] .sidebar-toggle img {
+  filter: brightness(0) invert(1);
+  opacity: 0.75;
+}
 .progress span {
   display: block;
   height: 100%;
@@ -569,6 +638,8 @@ td {
   overflow: hidden;
   clip: rect(0, 0, 0, 0);
 }
+
+// Em telas médias, o menu recolhe e as tabelas passam para uma coluna.
 @media (max-width: 1100px) {
   .sidebar {
     width: 76px;
@@ -596,6 +667,8 @@ td {
     min-height: 520px;
   }
 }
+
+// Ajustes para celulares: remove a lateral e empilha todos os blocos.
 @media (max-width: 700px) {
   .app-shell {
     padding-top: 64px;

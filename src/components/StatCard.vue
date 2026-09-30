@@ -1,4 +1,5 @@
 <template>
+  <!-- Card reutilizado pelos quatro indicadores do dashboard. -->
   <article class="stat-card" :class="{ 'stat-card--featured': featured }">
     <div class="stat-card__header">
       <span class="stat-card__icon" :class="`stat-card__icon--${tone}`">
@@ -16,6 +17,7 @@
 <script>
 export default {
   name: "StatCard",
+  // As propriedades permitem mudar conteúdo, cor e destaque sem duplicar o componente.
   props: {
     title: { type: String, required: true },
     value: { type: Number, default: 0 },

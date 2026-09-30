@@ -1,8 +1,9 @@
 <template>
+  <!-- Alterna entre o convite de upload e os dados do último PDF processado. -->
   <section class="panel latest-panel">
     <header class="panel__header panel__header--row">
       <div>
-        <h2>CPFs da última extração</h2>
+        <h2>Documentos da última extração</h2>
         <p>Acompanhe o resultado do arquivo mais recente enviado.</p>
       </div>
       <button
@@ -14,6 +15,7 @@
       </button>
     </header>
 
+    <!-- O template agrupa resumo e tabela sem criar um elemento visual extra. -->
     <template v-if="extraction">
       <div class="file-summary">
         <span class="file-summary__icon"
@@ -40,19 +42,26 @@
           <thead>
             <tr>
               <th>Status</th>
-              <th>CPF</th>
+              <th>Tipo</th>
+              <th>Documento</th>
             </tr>
           </thead>
           <tbody>
-            <tr v-for="cpf in extraction.cpfs" :key="cpf.normalized">
+            <tr
+              v-for="document in extraction.documents"
+              :key="`${document.type}-${document.normalized}`"
+            >
               <td>
                 <span
                   class="status"
-                  :class="cpf.isValid ? 'status--valid' : 'status--invalid'"
-                  >{{ cpf.isValid ? "Válido" : "Inválido" }}</span
+                  :class="
+                    document.isValid ? 'status--valid' : 'status--invalid'
+                  "
+                  >{{ document.isValid ? "Válido" : "Inválido" }}</span
                 >
               </td>
-              <td>{{ cpf.formatted }}</td>
+              <td>{{ document.type }}</td>
+              <td>{{ document.formatted }}</td>
             </tr>
           </tbody>
         </table>
@@ -65,7 +74,8 @@
       /></span>
       <h3>Comece enviando um PDF</h3>
       <p>
-        Ao enviar um arquivo, o sistema identifica e armazena os CPFs válidos.
+        Ao enviar um arquivo, o sistema identifica e armazena CPFs e CNPJs
+        válidos.
       </p>
       <button class="button button--brand" @click="$emit('upload')">
         <img src="../assets/icons/upload-white.svg" alt="" /> Enviar PDF
@@ -77,6 +87,7 @@
 <script>
 export default {
   name: "LatestExtraction",
+  // O componente recebe o resultado pronto e apenas cuida da apresentação.
   props: { extraction: { type: Object, default: null } },
   methods: {
     formatDate(value) {

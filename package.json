@@ -13,8 +13,10 @@
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
+    "@supabase/supabase-js": "^2.117.2",
     "firebase": "^12.19.0",
     "pdfjs-dist": "^3.11.174",
+    "tesseract.js": "^7.0.0",
     "vue": "^2.7.16"
   },
   "devDependencies": {
