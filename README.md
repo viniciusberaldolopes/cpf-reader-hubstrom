@@ -51,7 +51,7 @@ O arquivo `.env` é ignorado pelo Git. O `.env.example` contém somente os nomes
 
 ## Configuração dos serviços
 
-1. No Firebase, crie o Realtime Database e publique `database.rules.json` na aba **Regras**.
+1. No Firebase, crie o Realtime Database e publique as regras com `npx firebase-tools deploy --only database`.
 2. No Supabase, aplique a migration com `npx supabase db push` para criar o bucket.
 3. Preencha no `.env` as configurações dos dois serviços.
 4. Reinicie `npm run dev` depois de alterar o `.env`.
