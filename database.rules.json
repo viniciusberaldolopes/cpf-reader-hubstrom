@@ -1,0 +1,14 @@
+{
+  "rules": {
+    "uploads": {
+      ".read": true,
+      ".write": true,
+      ".indexOn": ["uploadedAt"]
+    },
+    "cpfRecords": {
+      ".read": true,
+      ".write": true,
+      ".indexOn": ["extractedAt", "normalized", "uploadId"]
+    }
+  }
+}

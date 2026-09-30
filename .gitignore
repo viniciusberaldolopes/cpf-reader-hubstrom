@@ -1,0 +1,23 @@
+# Dependências instaladas pelo npm
+node_modules/
+
+# Build gerado para produção
+dist/
+
+# Variáveis de ambiente
+.env
+.env.local
+.env.*.local
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Arquivos do macOS
+.DS_Store
+
+# Configurações locais de editores
+.vscode/
+.idea/
